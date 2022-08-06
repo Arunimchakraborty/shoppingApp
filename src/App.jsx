@@ -1,10 +1,10 @@
-import Login from "./components/Login";
+import Signup from "./components/Signup"
 import { MantineProvider } from "@mantine/core";
 
 function App() {
 	return (
 		<MantineProvider withGlobalStyles withNormalizeCSS>
-			<Login />
+			<Signup />
 		</MantineProvider>
 	);
 }
