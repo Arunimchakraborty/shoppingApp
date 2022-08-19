@@ -1,5 +1,5 @@
-import { Input } from '@mantine/core';
-import { IconAt, IconEyeCheck, IconEyeOff, IconPhone } from '@tabler/icons';
+import { Button, Input } from '@mantine/core';
+import { IconAt, IconEyeCheck, IconEyeOff, IconKey, IconPhone } from '@tabler/icons';
 import { PasswordInput } from '@mantine/core';
 import { Title } from '@mantine/core';
 export default function Login(){
@@ -33,14 +33,18 @@ export default function Login(){
             <div style={{paddingTop: 20, paddingBottom: 20,}}>
                 <PasswordInput
                 placeholder="Password"
-                label="Password"
-                description="Password must include at least one letter, number and special character"
                 required
+                icon={<IconKey />}
                 defaultValue="secret"
                 visibilityToggleIcon={({ reveal, size }) =>
                 reveal ? <IconEyeOff size={size} /> : <IconEyeCheck size={size} />
       }
                 />
+            </div>
+            <div style={{display: 'flex', justifyContent: "center", paddingTop: 20}}>
+                <Button color="dark" onClick={() => {console.log('logged in')}}>
+                    Sign Up
+                </Button>
             </div>
         </div>
     )

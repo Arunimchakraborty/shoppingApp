@@ -1,10 +1,16 @@
 import Signup from "./components/Signup"
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, Paper } from "@mantine/core";
+import Login from "./components/Login";
+import MainPage from "./components/MainPage";
+import ShoppingLists from "./components/ShoppingLists"
 
 function App() {
 	return (
-		<MantineProvider withGlobalStyles withNormalizeCSS>
-			<Signup />
+		<MantineProvider withGlobalStyles withNormalizeCSS >
+			<Paper>
+				<MainPage name={'Arunim'} />
+				{/* <ShoppingLists shoppingLists={['hellu', 'well well well']} /> */}
+			</Paper>
 		</MantineProvider>
 	);
 }

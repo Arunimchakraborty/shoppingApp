@@ -1,4 +1,4 @@
-import { Input } from '@mantine/core';
+import { Button, Input } from '@mantine/core';
 import { IconAt, IconEyeCheck, IconEyeOff } from '@tabler/icons';
 import { PasswordInput } from '@mantine/core';
 import { Title } from '@mantine/core';
@@ -23,8 +23,13 @@ export default function Login(){
                 defaultValue="secret"
                 visibilityToggleIcon={({ reveal, size }) =>
                 reveal ? <IconEyeOff size={size} /> : <IconEyeCheck size={size} />
-      }
+                }
                 />
+            </div>
+            <div style={{display: 'flex', justifyContent: "center", paddingTop: 20}}>
+                <Button color="dark" onClick={() => {console.log('logged in')}}>
+                    Login
+                </Button>
             </div>
         </div>
     )
