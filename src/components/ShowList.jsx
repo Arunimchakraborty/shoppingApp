@@ -11,20 +11,27 @@ export default function () {
         date: new Date().toISOString()
     }
     return(
-        <div>
+        <div style={{paddingTop: 20}}>
+            <h2 style={{textAlign: "center"}}>List Summary</h2>
+            <div style={{marginBottom: 10}}>
+                <div>
+                    <Text size={'sm'}>Added By {list.user}</Text>
+                </div>
+                <div>
+                    <Text size={'xs'}>Added at {list.date}</Text>
+                </div>
+            </div>
             <List>
                 {list.items.map((val, index) => {
                     return(
-                        <List.Item key={index}>{val.name} - {val.value} {val.unit}</List.Item>
+                        <div style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, marginBottom: 20, backgroundColor: "#F4F6F7", borderRadius: 10, width: "85%"}} key={index}>
+                            <Text>{val.name}</Text>
+                            <Text>{val.value} {val.unit}</Text>
+                        </div>
                     )
                 })}
             </List>
-            <div>
-                <Text>Added By {list.user}</Text>
-            </div>
-            <div>
-                <Text>Added at {list.date}</Text>
-            </div>
+            
         </div>
     )
 }
