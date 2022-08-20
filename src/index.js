@@ -6,18 +6,20 @@ import MainPage from "./components/MainPage";
 import NewList from "./components/NewList";
 import ShowList from "./components/ShowList";
 import Signup from "./components/Signup";
+import OTPScreen from "./components/OTPScreen";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<Routes>
-				{/* <Route path="/" element={<MainPage />} /> */}
 				<Route path="/" element={<Signup />} />
+				<Route path="/otp/:email" element={<OTPScreen />} />
 				<Route path="newlist" element={<NewList />} />
 				<Route path="showlist" element={<ShowList />} />
 			</Routes>
 		</BrowserRouter>
+		{/* <App /> */}
 	</React.StrictMode>
 );
 
