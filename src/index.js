@@ -22,7 +22,7 @@ root.render(
 					<Route path="mainpage" element={<MainPage />} />
 					<Route path="/otp/:email" element={<OTPScreen />} />
 					<Route path="newlist" element={<NewList />} />
-					<Route path="showlist" element={<ShowList />} />
+					<Route path="/showlist/:id" element={<ShowList />} />
 				</Routes>
 			</BrowserRouter>
 		</MantineProvider>

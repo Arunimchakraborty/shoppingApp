@@ -2,7 +2,7 @@ import Signup from "./components/Signup"
 import { Button, MantineProvider, Paper } from "@mantine/core";
 import Login from "./components/Login";
 import MainPage from "./components/MainPage";
-import ShoppingLists from "./components/ShoppingLists"
+import ShoppingLists from "./components/MainPage/ShoppingLists"
 import OTPScreen from "./components/OTPScreen";
 import { useNavigate } from "react-router-dom";
 

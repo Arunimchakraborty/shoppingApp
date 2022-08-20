@@ -3,13 +3,31 @@ import { useEffect } from "react";
 import { useRef, useState } from "react";
 import { useInputState } from '@mantine/hooks';
 import { List } from '@mantine/core';
+import axios from "axios";
+import config from "../config";
+import { useNavigate } from "react-router-dom";
 
 export default function NewList({list, setList}) {
+
+    const navigate = useNavigate()
+
     const [value, setValue] = useState(1);
     const [unit, setUnit] = useState('KG');
     const [items, setItems] = useState([]);
     const [itemName, setItemName] = useInputState('');
+
+    function newList() {
+        axios
+        .post(`${config.backendLocation}/list/createlist`,
+            {items: items},
+            {headers: {token : localStorage.getItem('token')}})
+        .then(res => {console.log(res); navigate('../mainpage')})
+        .catch(err => console.log(err))
+    }
+
     useEffect(() => {console.log(items)}, [items])
+
+
     return(
         <div >
             <div style={{width: "100%", justifyContent: "center", display: "flex"}} >
@@ -32,7 +50,7 @@ export default function NewList({list, setList}) {
                 <AddButton onClick={() => {setItems([...items, {name: itemName, value: value, unit: unit}])}} />
             </div>
             <div style={{display: "flex", flexDirection: 'row', width: "100%", justifyContent: "space-evenly", position: "fixed", bottom: 10}}>
-                <Button color="dark" style={{width: "40%", borderWidth: 0}}>
+                <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => {items.length!=0 ? newList() : console.log('Add Some Items First')}}>
                     Add
                 </Button>
                 <Button color="gray" style={{width: "40%", borderWidth: 0}}>

@@ -10,7 +10,7 @@ import {
   useMantineTheme,
   Button,
 } from '@mantine/core';
-import ShoppingLists from './ShoppingLists';
+import ShoppingLists from './MainPage/ShoppingLists';
 import axios from 'axios';
 import config from '../config';
 import { useEffect } from 'react';
