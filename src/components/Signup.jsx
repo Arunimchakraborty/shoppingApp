@@ -103,6 +103,11 @@ export default function Signup(){
                     Sign Up
                 </Button>
             </div>
+            <div style={{display: "flex", position: "absolute", top: 10, right: 10}}>
+                <Button variant="subtle" color="dark" onClick={() => navigate('/login')}>
+                    Login
+                </Button>
+            </div>
             <ErrorModal setVisible={setErrorModal} visible={errorModal}  />
         </div>
     )

@@ -1,5 +1,5 @@
 import { Button, Modal, NumberInput, useMantineTheme } from "@mantine/core";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useInputState } from '@mantine/hooks';
 import axios from "axios";
 import config from "../config";
@@ -12,6 +12,8 @@ export default function OTPScreen() {
     const locationArray = location.pathname.split('/')
     const email = locationArray.splice(-1)
 
+    const navigate = useNavigate()
+
     const [user, setUser] = useState({})
 
     const [otp, setOtp] = useInputState()
@@ -23,6 +25,7 @@ export default function OTPScreen() {
         })
         .then(res => {
             console.log(res); 
+            setUser(res.data)
             login()
         })
         .catch(err => console.log(err))
@@ -34,12 +37,25 @@ export default function OTPScreen() {
             password: localStorage.getItem('password')
         })
         .then(res => {
-            console.log(res)
+            console.log(res);
+            localStorage.clear()
+            localStorage.setItem('token', res.data.token)
+            getSelf()
         })
         .catch(err => {
             console.log(err)
         })
     }
+
+    function getSelf() {
+        axios
+          .get(`${config.backendLocation}/user/self`, {headers: {token : localStorage.getItem('token')}})
+          .then(res => {
+            console.log(res.data)
+            localStorage.setItem('user', JSON.stringify(res.data))
+            navigate('/mainpage')
+          })
+      }
 
     return (
         <div style={{paddingTop: 20}}>

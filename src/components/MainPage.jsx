@@ -11,11 +11,19 @@ import {
   Button,
 } from '@mantine/core';
 import ShoppingLists from './ShoppingLists';
+import axios from 'axios';
+import config from '../config';
+import { useEffect } from 'react';
 
 export default function MainPage({name}) {
+
   const date = new Date()
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem('user'))
+  console.log(user)
+
   return (
     <AppShell
       styles={{
@@ -75,7 +83,7 @@ export default function MainPage({name}) {
               />
             </MediaQuery>
 
-            <Text>Welcome {name}</Text>
+            <Text>Welcome {JSON.parse(localStorage.getItem('user')).firstName}</Text>
           </div>
         </Header>
       }
