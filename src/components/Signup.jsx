@@ -2,7 +2,7 @@ import { Button, Input } from '@mantine/core';
 import { IconAt, IconEyeCheck, IconEyeOff, IconKey, IconPhone } from '@tabler/icons';
 import { PasswordInput } from '@mantine/core';
 import { Title } from '@mantine/core';
-export default function Login(){
+export default function Signup(){
     return(
         <div style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 30, paddingRight: 30}}>
             <div style={{display: "flex", width: "100%", justifyContent: "center",paddingTop: 20, paddingBottom: 40 }}>

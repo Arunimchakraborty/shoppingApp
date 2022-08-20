@@ -5,13 +5,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import NewList from "./components/NewList";
 import ShowList from "./components/ShowList";
+import Signup from "./components/Signup";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<MainPage />} />
+				{/* <Route path="/" element={<MainPage />} /> */}
+				<Route path="/" element={<Signup />} />
 				<Route path="newlist" element={<NewList />} />
 				<Route path="showlist" element={<ShowList />} />
 			</Routes>
