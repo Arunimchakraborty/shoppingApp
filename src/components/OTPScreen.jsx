@@ -12,6 +12,9 @@ export default function OTPScreen() {
     const locationArray = location.pathname.split('/')
     const email = locationArray.splice(-1)
 
+    const [errorModal, setErrorModal] = useState(false)
+    const [errormsg, setErrorMsg] = useState()
+
     const navigate = useNavigate()
 
     const [user, setUser] = useState({})
@@ -28,7 +31,11 @@ export default function OTPScreen() {
             setUser(res.data)
             login()
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            setErrorMsg(err.response.data.msg)
+            setErrorModal(true)
+        })
     }
 
     function login() {
@@ -44,6 +51,8 @@ export default function OTPScreen() {
         })
         .catch(err => {
             console.log(err)
+            setErrorMsg(err.response.data.msg)
+            setErrorModal(true)
         })
     }
 
@@ -77,25 +86,8 @@ export default function OTPScreen() {
                     Verify
                 </Button>
             </div>
+            <ErrorModal setVisible={setErrorModal} visible={errorModal} msg={errormsg}  />
         </div>
-    )
-}
-
-function ErrorModal({visible, setVisible}) {
-    const theme = useMantineTheme();
-    return (
-        <Modal
-        opened={visible}
-        centered
-        onClose={() => setVisible(false)}
-        overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
-        overlayOpacity={0.55}
-        overlayBlur={3}
-        >
-            <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
-                <h3>Error</h3>
-            </div>
-        </Modal>
     )
 }
 
@@ -108,4 +100,27 @@ const style = {
         position: "absolute", bottom: 80
     }
 
+}
+
+function ErrorModal({visible, setVisible, msg}) {
+    const theme = useMantineTheme();
+    return (
+        <Modal
+        opened={visible}
+        centered
+        onClose={() => setVisible(false)}
+        overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
+        overlayOpacity={0.55}
+        overlayBlur={3}
+        >
+            <div>
+                <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                    <h1>Error</h1>
+                </div>
+                <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                    <h4>{msg}</h4>
+                </div>
+            </div>
+        </Modal>
+    )
 }

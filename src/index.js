@@ -9,6 +9,9 @@ import Signup from "./components/Signup";
 import OTPScreen from "./components/OTPScreen";
 import Login from "./components/Login";
 import { MantineProvider } from "@mantine/core";
+import ShoppingLists from "./components/MainPage/ShoppingLists";
+import FamilyList from "./components/MainPage/FamilyList";
+import Profile from "./components/MainPage/Profile";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

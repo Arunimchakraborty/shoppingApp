@@ -19,6 +19,7 @@ export default function Signup(){
     const [password, setPassword] = useInputState()
 
     const [errorModal, setErrorModal] = useState(false)
+    const [errormsg, setErrorMsg] = useState()
 
     const navigate = useNavigate()
 
@@ -41,6 +42,8 @@ export default function Signup(){
         .catch(
             (err) => {
                 console.log(err)
+                setErrorMsg(err.response.data.msg)
+                setErrorModal(true)
             }
         )
     }
@@ -108,12 +111,12 @@ export default function Signup(){
                     Login
                 </Button>
             </div>
-            <ErrorModal setVisible={setErrorModal} visible={errorModal}  />
+            <ErrorModal setVisible={setErrorModal} visible={errorModal} msg={errormsg}  />
         </div>
     )
 }
 
-function ErrorModal({visible, setVisible}) {
+function ErrorModal({visible, setVisible, msg}) {
     const theme = useMantineTheme();
     return (
         <Modal
@@ -124,8 +127,13 @@ function ErrorModal({visible, setVisible}) {
         overlayOpacity={0.55}
         overlayBlur={3}
         >
-            <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
-                <h3>Error</h3>
+            <div>
+                <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                    <h1>Error</h1>
+                </div>
+                <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                    <h4>{msg}</h4>
+                </div>
             </div>
         </Modal>
     )

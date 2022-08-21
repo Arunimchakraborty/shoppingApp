@@ -1,4 +1,4 @@
-import { Button, Input } from '@mantine/core';
+import { Button, Input, Modal, useMantineTheme } from '@mantine/core';
 import { IconAt, IconEyeCheck, IconEyeOff } from '@tabler/icons';
 import { PasswordInput } from '@mantine/core';
 import { Title } from '@mantine/core';
@@ -6,12 +6,16 @@ import { useInputState } from '@mantine/hooks';
 import axios from 'axios';
 import config from '../config';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 export default function Login(){
 
     const navigate = useNavigate()
 
     const [email, setEmail] = useInputState()
     const [password, setPassword] = useInputState()
+
+    const [errorModal, setErrorModal] = useState(false)
+    const [errormsg, setErrorMsg] = useState()
 
     function getSelf() {
         axios
@@ -20,6 +24,11 @@ export default function Login(){
             console.log(res.data)
             localStorage.setItem('user', JSON.stringify(res.data))
             navigate('/mainpage')
+          })
+          .catch(err => {
+            console.log(err)
+            setErrorMsg(err.response.data.msg)
+            setErrorModal(true)
           })
       }
 
@@ -36,6 +45,8 @@ export default function Login(){
         })
         .catch(err => {
             console.log(err)
+            setErrorMsg(err.response.data.msg)
+            setErrorModal(true)
         })
     }
 
@@ -73,6 +84,30 @@ export default function Login(){
                     Sign Up
                 </Button>
             </div>
+            <ErrorModal setVisible={setErrorModal} visible={errorModal} msg={errormsg}  />
         </div>
+    )
+}
+
+function ErrorModal({visible, setVisible, msg}) {
+    const theme = useMantineTheme();
+    return (
+        <Modal
+        opened={visible}
+        centered
+        onClose={() => setVisible(false)}
+        overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
+        overlayOpacity={0.55}
+        overlayBlur={3}
+        >
+            <div>
+                <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                    <h1>Error</h1>
+                </div>
+                <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                    <h4>{msg}</h4>
+                </div>
+            </div>
+        </Modal>
     )
 }

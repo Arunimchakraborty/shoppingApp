@@ -5,9 +5,18 @@ import MainPage from "./components/MainPage";
 import ShoppingLists from "./components/MainPage/ShoppingLists"
 import OTPScreen from "./components/OTPScreen";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function App() {
+
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		if(localStorage.token) {
+			navigate('mainpage')
+		}
+	}, [])
+
 	return (
 		<MantineProvider withGlobalStyles withNormalizeCSS >
 			<div>
