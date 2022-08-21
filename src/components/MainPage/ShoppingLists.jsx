@@ -52,6 +52,14 @@ export default function ShoppingLists() {
         }
         , [screen])
 
+    useEffect(() => {
+        axios
+        .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
+            {headers: {token : localStorage.getItem('token')}})
+        .then(res => setShoppingLists(res.data))
+        .catch(err => console.log(err))
+    }, [selectedFamily])
+
     useEffect(() => {if(family.length != 0)setSelectedFamily(family[0].name)}, [family])
     
     const navigate = useNavigate();
