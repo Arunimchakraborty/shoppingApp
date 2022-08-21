@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Group, Input, NumberInput, Text, NumberInputHandlers, NativeSelect } from "@mantine/core";
+import { ActionIcon, Button, Group, Input, NumberInput, Text, NumberInputHandlers, NativeSelect, Modal, Autocomplete } from "@mantine/core";
 import { useEffect } from "react";
 import { useRef, useState } from "react";
 import { useInputState } from '@mantine/hooks';
@@ -15,6 +15,18 @@ export default function NewList({list, setList}) {
     const [unit, setUnit] = useState('KG');
     const [items, setItems] = useState([]);
     const [itemName, setItemName] = useInputState('');
+    const [assignModal, setAssignModal] = useInputState(false);
+    const [family, setFamily] = useState([])
+    const [selectedFamily, setSelectedFamily] = useState()
+
+    useEffect(() => {
+        axios
+        .get(`${config.backendLocation}/family/user`, {headers: {token : localStorage.getItem('token')}})
+        .then(res => {
+            console.log(res)
+            setFamily(res.data)
+        })
+    }, [])
 
     function newList() {
         axios
@@ -25,7 +37,17 @@ export default function NewList({list, setList}) {
         .catch(err => console.log(err))
     }
 
+    function newListWithFam() {
+        axios
+        .post(`${config.backendLocation}/list/createlist`,
+            {items: items, assignedTo : family.filter(e => e.name == selectedFamily)[0]._id},
+            {headers: {token : localStorage.getItem('token')}})
+        .then(res => {console.log(res); navigate('../mainpage')})
+        .catch(err => console.log(err))
+    }
+
     useEffect(() => {console.log(items)}, [items])
+    useEffect(() => {console.log(selectedFamily)}, [selectedFamily])
 
 
     return(
@@ -50,13 +72,24 @@ export default function NewList({list, setList}) {
                 <AddButton onClick={() => {setItems([...items, {name: itemName, value: value, unit: unit}])}} />
             </div>
             <div style={{display: "flex", flexDirection: 'row', width: "100%", justifyContent: "space-evenly", position: "fixed", bottom: 10}}>
-                <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => {items.length!=0 ? newList() : console.log('Add Some Items First')}}>
+                <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => {items.length!=0 ? setAssignModal(true) : console.log('Add Some Items First')}}>
                     Add
                 </Button>
-                <Button color="gray" style={{width: "40%", borderWidth: 0}}>
+                <Button color="gray" style={{width: "40%", borderWidth: 0}} onClick={() => navigate('../')}>
                     Cancel
                 </Button>
             </div>
+            {family ? 
+                <AssignModal 
+                data={family} 
+                value={selectedFamily} 
+                setValue={setSelectedFamily} 
+                opened={assignModal} 
+                setOpened={setAssignModal}
+                skipFunc={newList}
+                assignFunc={newListWithFam}
+                /> 
+            : null}
         </div>
     )
 }
@@ -103,5 +136,33 @@ function Quantity({value, setValue, unit, setUnit}) {
             />
 
         </div>
+    )
+}
+
+function AssignModal({data, value, setValue, opened, setOpened, assignFunc, skipFunc}) {
+    return(
+        <Modal 
+        opened={opened}
+        onClose={() => setOpened(false)}
+        >
+            <div>
+                <h2>Assign To Family</h2>
+                <NativeSelect 
+                label="Select Family to assign to" 
+                placeholder="Enter Family Name" 
+                data={data.map(val => val.name)}
+                value={value}
+                onChange={(event) => setValue(event.currentTarget.value)}
+                />
+                <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
+                    <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => assignFunc()}>
+                        Assign
+                    </Button>
+                    <Button color="gray" style={{width: "40%", borderWidth: 0}} onClick={() => skipFunc()} >
+                        Skip
+                    </Button>
+                </div>
+            </div>
+        </Modal>
     )
 }

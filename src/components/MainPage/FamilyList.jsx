@@ -32,7 +32,7 @@ export default function FamilyList() {
             familyList.length!=0 ? familyList.map((item, index) => {
                 return(
                         <div key={index} style={{paddingTop: 20, paddingBottom: 20, backgroundColor: "#ECF0F1", width: "90%", marginBottom: 10, paddingLeft: 20, paddingRight: 10, borderRadius: 10}}
-                            onClick={() => navigate(`/showlist/${item._id}`)}
+                            onClick={() => navigate(`/addmember/${item._id}`)}
                         >
                             <Text>{item.name}</Text>
                         </div>

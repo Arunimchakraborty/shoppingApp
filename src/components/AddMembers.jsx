@@ -1,12 +1,74 @@
 import { ActionIcon, Button, Input, List, Text } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { IconAt, IconPlus } from "@tabler/icons";
+import axios from "axios";
+import { useEffect } from "react";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import config from "../config";
+import ErrorModal from "./Error";
 
 export default function AddMember(){
+
+  const location = useLocation()
+  const locationArray = location.pathname.split('/')
+  const id = locationArray.splice(-1)[0]
+
+  const [family, setFamily] = useState()
+  const [familyIDs, setFamilyIDs] = useState([])
+
+  const [errMsg, setErrMsg] = useState('')
+  const [errModal, setErrModal] = useState(false)
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    axios
+    .get(`${config.backendLocation}/family/getfamily/${id}`, {headers: {token : localStorage.getItem('token')}})
+    .then(res => {
+      setFamily(res.data.members)
+    })
+    axios
+    .get(`${config.backendLocation}/family/getmembers/${id}`, {headers: {token : localStorage.getItem('token')}})
+    .then(res => {
+      setFamilyIDs(res.data.members)
+    })
+    .catch(err => {
+      setErrMsg(err.response.data.msg)
+      setErrModal(true)
+    })
+  }, [])
+
+  function getUserData() {
+    axios
+    .get(`${config.backendLocation}/user/byemail/${email}`)
+    .then(res => {
+      console.log(res)
+      setFamily([...family, res.data])
+      setFamilyIDs([...familyIDs, res.data._id])
+      setEmail('')
+    })
+    .catch(err => {
+      setErrMsg(err.response.data.msg)
+      setErrModal(true)
+    })
+  }
+
+  function addMembers() {
+    axios
+    .post(`${config.backendLocation}/family/addmembers/${id}`, {members: familyIDs}, {headers: {token : localStorage.getItem('token')}})
+    .then(res => {
+      console.log(res)
+      navigate('../mainpage')
+    })
+    .catch(err => {
+      setErrMsg(err.response.data.msg)
+      setErrModal(true)
+    })
+  }
+
   const [emailArray, setEmailArray] = useState([])
   const [email, setEmail] = useInputState()
-  const [name, setName] = useInputState()
   return (
     <div>
 
@@ -33,24 +95,25 @@ export default function AddMember(){
       </div> */}
       <div style={{paddingTop: 20}}>
         <List>
-          {emailArray.map(val => {return(
-            <Items email={val} />
-          )})}
+          {family ?family.map(val => {return(
+            <Items email={val.email} />
+          )}) : null}
         </List>
       </div>
       <div style={{width: "100%", display: "flex", justifyContent: "center", paddingTop: 20}}>
-        <ActionIcon color="dark" size="lg" radius="xl" variant="filled" onClick={() => {emailArray.push(email); setEmail('');}}>
+        <ActionIcon color="dark" size="lg" radius="xl" variant="filled" onClick={() => {getUserData()}}>
           <IconPlus />
         </ActionIcon> 
       </div>
       <div style={{display: "flex", flexDirection: 'row', width: "100%", justifyContent: "space-evenly", position: "fixed", bottom: 10}}>
-        <Button color="dark" style={{width: "40%", borderWidth: 0}}>
+        <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => {addMembers()}}>
             Add
         </Button>
         <Button color="gray" style={{width: "40%", borderWidth: 0}}>
             Cancel
         </Button>
       </div>
+      <ErrorModal msg={errMsg} setVisible={setErrModal} visible={errModal} />
     </div>
   )
 }

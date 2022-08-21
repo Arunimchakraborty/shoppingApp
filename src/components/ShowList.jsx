@@ -51,6 +51,9 @@ export default function ShowList() {
                     )
                 })}
             </List>
+            <div style={{paddingTop: 30}}>
+                <Text>Assigned To : {list.assignedTo ?list.assignedTo.name : "None"}</Text>
+            </div>
         </div> 
     : null
     )

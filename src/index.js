@@ -29,7 +29,7 @@ root.render(
 					<Route path="newlist" element={<NewList />} />
 					<Route path="/showlist/:id" element={<ShowList />} />
 					<Route path="newfamily" element={<NewFamily />} />
-					<Route path="addmember" element={<AddMember />} />
+					<Route path="/addmember/:id" element={<AddMember />} />
 				</Routes>
 			</BrowserRouter>
 		</MantineProvider>
