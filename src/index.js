@@ -12,6 +12,8 @@ import { MantineProvider } from "@mantine/core";
 import ShoppingLists from "./components/MainPage/ShoppingLists";
 import FamilyList from "./components/MainPage/FamilyList";
 import Profile from "./components/MainPage/Profile";
+import NewFamily from "./components/NewFamily";
+import AddMember from "./components/AddMembers";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -26,6 +28,8 @@ root.render(
 					<Route path="/otp/:email" element={<OTPScreen />} />
 					<Route path="newlist" element={<NewList />} />
 					<Route path="/showlist/:id" element={<ShowList />} />
+					<Route path="newfamily" element={<NewFamily />} />
+					<Route path="addmember" element={<AddMember />} />
 				</Routes>
 			</BrowserRouter>
 		</MantineProvider>

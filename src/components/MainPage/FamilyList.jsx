@@ -1,28 +1,40 @@
 import { Button, Text } from "@mantine/core";
+import axios from "axios";
+import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
+import config from "../../config";
 
 
 export default function FamilyList() {
-    const [familyList, setFamilyList] = useState()
+    const [familyList, setFamilyList] = useState([])
     // useEffect(() => {
     //     axios
     //     .get(`${config.backendLocation}/list/creator`, {headers: {token : localStorage.getItem('token')}})
     //     .then(res => setShoppingLists(res.data))
     //     .catch(err => console.log(err))
     // }, [])
+    useEffect(() => {
+      axios
+      .get(`${config.backendLocation}/family/user`, {headers: {token : localStorage.getItem('token')}})
+      .then(res => {
+        console.log(res)
+        setFamilyList(res.data)
+      })
+      .catch(err => console.log(err))
+    }, [])
     
     const navigate = useNavigate();
     return (
         <div>
             {
-            familyList ? familyList.map((item, index) => {
+            familyList.length!=0 ? familyList.map((item, index) => {
                 return(
                         <div key={index} style={{paddingTop: 20, paddingBottom: 20, backgroundColor: "#ECF0F1", width: "90%", marginBottom: 10, paddingLeft: 20, paddingRight: 10, borderRadius: 10}}
                             onClick={() => navigate(`/showlist/${item._id}`)}
                         >
-                            <Text>{item.createdAt}</Text>
+                            <Text>{item.name}</Text>
                         </div>
                 )
             })  : 
@@ -31,7 +43,7 @@ export default function FamilyList() {
             </div>
             }
             <div style={{position: "absolute", bottom: "15%", right: "10%"}}>
-                <Button color="dark" radius="xl" size="xl" compact component={Link} to="/newlist" >
+                <Button color="dark" radius="xl" size="xl" compact component={Link} to="/newfamily" >
                 +
                 </Button>
             </div>
