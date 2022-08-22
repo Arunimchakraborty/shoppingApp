@@ -54,6 +54,9 @@ export default function ShowList() {
             <div style={{paddingTop: 30}}>
                 <Text>Assigned To : {list.assignedTo ?list.assignedTo.name : "None"}</Text>
             </div>
+            <div style={{paddingTop: 30}}>
+                <Text>Created by : {list.creator.firstName} {list.creator.lastName}</Text>
+            </div>
         </div> 
     : null
     )

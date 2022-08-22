@@ -25,6 +25,7 @@ export default function NewList({list, setList}) {
         .then(res => {
             console.log(res)
             setFamily(res.data)
+            setSelectedFamily(res.data[0].name)
         })
     }, [])
 
