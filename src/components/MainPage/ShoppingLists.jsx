@@ -7,9 +7,14 @@ import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import config from "../../config";
 
+const months = [
+    'January', 'February', 'March', 'April',
+    'May', 'June', 'July', 'August',
+    'September', 'October', 'November', 'December'
+]
 
 export default function ShoppingLists() {
-    const [shoppingLists, setShoppingLists] = useState()
+    const [shoppingLists, setShoppingLists] = useState([])
     const [family, setFamily] = useState([])
     const [selectedFamily, setSelectedFamily] = useState(undefined)
     const [firstScreen, setFirstScreen] = useState(true)
@@ -44,11 +49,13 @@ export default function ShoppingLists() {
                 // console.log(family.filter(e => e.name == "Main Family")[0].name)
                 // console.log(family[0].name)
                 // console.log(selectedFamily)
-                axios
-                .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
-                    {headers: {token : localStorage.getItem('token')}})
-                .then(res => setShoppingLists(res.data))
-                .catch(err => console.log(err))
+                family.length != 0 ?
+                    axios
+                    .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
+                        {headers: {token : localStorage.getItem('token')}})
+                    .then(res => setShoppingLists(res.data))
+                    .catch(err => console.log(err))
+                : console.log('Nothing found')
             }
         }
         , [screen])
@@ -107,7 +114,7 @@ function SelfList({shoppingLists, navigate}){
     return (
         <div style={{paddingTop: 10}}>
             {
-            shoppingLists ? shoppingLists.slice(0).reverse().map((item, index) => {
+            shoppingLists.length != 0 ? shoppingLists.slice(0).reverse().map((item, index) => {
                 // parsedDate = new Date(Date.parse(item.createdAt))
                 const parsedDate = new Date(item.createdAt)
                 // console.log(parsedDate)
@@ -118,8 +125,8 @@ function SelfList({shoppingLists, navigate}){
                         paddingRight: 10, borderRadius: 10}}
                     onClick={() => navigate(`/showlist/${item._id}`)}
                     >
-                        <Text size={'md'}>Date :- {parsedDate.getDate()}-{parsedDate.getMonth()+1}-{parsedDate.getFullYear()}</Text>
-                        <Text size={'sm'}>Time :- {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
+                        <Text size={'md'}>Date - {parsedDate.getDate()} {months[parsedDate.getMonth()]} {parsedDate.getFullYear()}</Text>
+                        <Text size={'sm'}>Time - {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
                     </div>
                 )
             })  : 
@@ -141,38 +148,44 @@ function FamilyList({data, value, setValue, shoppingLists, navigate}) {
     // var tzoffset = (new Date()).getTimezoneOffset() * 60000; // timezone offset in milliseconds
     return(
         <div style={{paddingTop: 10}}>
-            <div style={{marginBottom: 10}}>
-                <NativeSelect 
-                label="Select Family to assign to" 
-                placeholder="Enter Family Name" 
-                data={data.map(val => val.name)}
-                value={value}
-                onChange={(event) => setValue(event.currentTarget.value)}
-                />
-            </div>
-            <div style={{paddingTop: 10}}>    
-                {
-                shoppingLists ? shoppingLists.slice(0).reverse().map((item, index) => {
-                    const parsedDate = new Date(item.createdAt)
-                    return(
-                            <div key={index} style={{paddingTop: 20, paddingBottom: 20, backgroundColor: "#ECF0F1", width: "90%", marginBottom: 10, paddingLeft: 20, paddingRight: 10, borderRadius: 10}}
-                                onClick={() => navigate(`/showlist/${item._id}`)}
-                            >
-                                <Text size={'md'}>Date :- {parsedDate.getDate()}-{parsedDate.getMonth()+1}-{parsedDate.getFullYear()}</Text>
-                                <Text size={'sm'}>Time :- {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
-                            </div>
-                    )
-                })  : 
+            {data.length != 0 ? 
                 <div>
-                    <Text>Your Shopping Lists will appear here</Text>
+                    <div style={{marginBottom: 10}}>
+                    <NativeSelect 
+                    label="Select Family to assign to" 
+                    placeholder="Enter Family Name" 
+                    data={data.map(val => val.name)}
+                    value={value}
+                    onChange={(event) => setValue(event.currentTarget.value)}
+                    />
                 </div>
-                }
-            </div>
-            <div style={{position: "absolute", bottom: "15%", right: "10%"}}>
-                <Button color="dark" radius="xl" size="xl" compact component={Link} to="/newlist" >
-                +
-                </Button>
-            </div>
+                <div style={{paddingTop: 10}}>    
+                    {
+                    shoppingLists ? shoppingLists.slice(0).reverse().map((item, index) => {
+                        const parsedDate = new Date(item.createdAt)
+                        return(
+                                <div key={index} style={{paddingTop: 20, paddingBottom: 20, backgroundColor: "#ECF0F1", width: "90%", marginBottom: 10, paddingLeft: 20, paddingRight: 10, borderRadius: 10}}
+                                    onClick={() => navigate(`/showlist/${item._id}`)}
+                                >
+                                    <Text size={'md'}>Date - {parsedDate.getDate()} {months[parsedDate.getMonth()]} {parsedDate.getFullYear()}</Text>
+                                    <Text size={'sm'}>Time - {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
+                                </div>
+                        )
+                    })  : 
+                    <div>
+                        <Text>Your Shopping Lists will appear here</Text>
+                    </div>
+                    }
+                </div>
+                <div style={{position: "absolute", bottom: "15%", right: "10%"}}>
+                    <Button color="dark" radius="xl" size="xl" compact component={Link} to="/newlist" >
+                    +
+                    </Button>
+                </div>
+                </div>
+                : <Text>No Families found</Text>
+            }
+            
         </div>
     )
 }

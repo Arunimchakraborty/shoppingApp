@@ -146,24 +146,32 @@ function AssignModal({data, value, setValue, opened, setOpened, assignFunc, skip
         opened={opened}
         onClose={() => setOpened(false)}
         >
-            <div>
-                <h2>Assign To Family</h2>
-                <NativeSelect 
-                label="Select Family to assign to" 
-                placeholder="Enter Family Name" 
-                data={data.map(val => val.name)}
-                value={value}
-                onChange={(event) => setValue(event.currentTarget.value)}
-                />
-                <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
-                    <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => assignFunc()}>
-                        Assign
-                    </Button>
-                    <Button color="gray" style={{width: "40%", borderWidth: 0}} onClick={() => skipFunc()} >
-                        Skip
+            {data.length != 0 ? 
+                <div>
+                    <h2>Assign To Family</h2>
+                    <NativeSelect 
+                    label="Select Family to assign to" 
+                    placeholder="Enter Family Name" 
+                    data={data.map(val => val.name)}
+                    value={value}
+                    onChange={(event) => setValue(event.currentTarget.value)}
+                    /> 
+                    
+                    <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
+                        <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => assignFunc()}>
+                            Assign
+                        </Button>
+                        <Button color="gray" style={{width: "40%", borderWidth: 0}} onClick={() => skipFunc()} >
+                            Skip
+                        </Button>
+                    </div>
+                </div>
+            :   <div style={{display: "flex", width: "100%", justifyContent: "center"}}>
+                    <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => skipFunc()}>
+                        Add List
                     </Button>
                 </div>
-            </div>
+            }
         </Modal>
     )
 }

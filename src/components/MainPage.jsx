@@ -85,7 +85,7 @@ export default function MainPage() {
         }
         footer={
           <Footer height={60} p="md">
-            {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}  ${date.getHours()%12}.${date.getMinutes()}` } 🌚
+            <Text size={'sm'}>Developed by Arunim Chakraborty</Text>
           </Footer>
         }
         header={
