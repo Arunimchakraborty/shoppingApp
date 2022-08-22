@@ -5,6 +5,7 @@ import axios from "axios";
 import config from "../config";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Preferences } from "@capacitor/preferences";
 
 export default function OTPScreen() {
 
@@ -20,6 +21,44 @@ export default function OTPScreen() {
     const [user, setUser] = useState({})
 
     const [otp, setOtp] = useInputState()
+
+    // set item
+    async function setItem(key, item) {
+        await Preferences.set({
+            key: key,
+            value: item,
+        })
+		.then((res) => {
+			console.log({ res: res, msg: `Saved Item succesfully` });
+			localStorage.setItem(key, item);
+            getSelf()
+		})
+		.catch((err) => console.log(err));
+    }
+
+    // set object
+    async function setObject(key, object) {
+        await Preferences.set({
+            key: key,
+            value: JSON.stringify(object),
+        })
+            .then((res) => {
+                console.log({ res: res, msg: `Saved object succesfully` });
+                localStorage.setItem(key, JSON.stringify(object));
+                navigate('/mainpage')
+            })
+            .catch((err) => console.log(err));
+    }
+
+    // clear storage
+    async function clearStorage() {
+	    const ret = await Preferences.clear()
+		.then((res) => {
+			console.log({ res: res, msg: `Cleared Storage succesfully` });
+			localStorage.clear();
+		})
+		.catch((err) => console.log(err));
+    }
 
     function verifyOTP() {
         axios.post(`${config.backendLocation}/auth/verify`, {
@@ -43,11 +82,23 @@ export default function OTPScreen() {
             email: email,
             password: localStorage.getItem('password')
         })
+        // .then(res => {
+        //     console.log(res);
+        //     localStorage.clear()
+        //     localStorage.setItem('token', res.data.token)
+        //     getSelf()
+        // })
+        // .catch(err => {
+        //     console.log(err)
+        //     setErrorMsg(err.response.data.msg)
+        //     setErrorModal(true)
+        // })
         .then(res => {
             console.log(res);
-            localStorage.clear()
-            localStorage.setItem('token', res.data.token)
-            getSelf()
+            clearStorage()
+            // localStorage.clear()
+            setItem('token', res.data.token)
+            // localStorage.setItem('token', res.data.token)
         })
         .catch(err => {
             console.log(err)
@@ -56,15 +107,31 @@ export default function OTPScreen() {
         })
     }
 
+    // function getSelf() {
+    //     axios
+    //       .get(`${config.backendLocation}/user/self`, {headers: {token : localStorage.getItem('token')}})
+    //       .then(res => {
+    //         console.log(res.data)
+    //         localStorage.setItem('user', JSON.stringify(res.data))
+    //         navigate('/mainpage')
+    //       })
+    //   }
+
     function getSelf() {
         axios
           .get(`${config.backendLocation}/user/self`, {headers: {token : localStorage.getItem('token')}})
           .then(res => {
             console.log(res.data)
-            localStorage.setItem('user', JSON.stringify(res.data))
-            navigate('/mainpage')
+            // localStorage.setItem('user', JSON.stringify(res.data))
+            setObject('user', res.data)
+            // navigate('/mainpage')
           })
-      }
+          .catch(err => {
+            console.log(err)
+            setErrorMsg(err.response.data.msg)
+            setErrorModal(true)
+          })
+    }
 
     return (
         <div style={{paddingTop: 20}}>

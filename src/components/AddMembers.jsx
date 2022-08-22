@@ -109,7 +109,7 @@ export default function AddMember(){
         <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => {addMembers()}}>
             Add
         </Button>
-        <Button color="gray" style={{width: "40%", borderWidth: 0}}>
+        <Button color="gray" style={{width: "40%", borderWidth: 0}} onClick={() => navigate('../')}>
             Cancel
         </Button>
       </div>

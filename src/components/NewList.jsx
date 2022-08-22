@@ -70,7 +70,11 @@ export default function NewList({list, setList}) {
                 </div>
             </div>
             <div style={{display: "flex", justifyContent: "center", paddingTop: 10}}>
-                <AddButton onClick={() => {setItems([...items, {name: itemName, value: value, unit: unit}])}} />
+                <AddButton onClick={() => {
+                    setItems([...items, {name: itemName, value: value, unit: unit}]); 
+                    setItemName(''); 
+                    setValue(1)
+                }} />
             </div>
             <div style={{display: "flex", flexDirection: 'row', width: "100%", justifyContent: "space-evenly", position: "fixed", bottom: 10}}>
                 <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => {items.length!=0 ? setAssignModal(true) : console.log('Add Some Items First')}}>
@@ -157,7 +161,7 @@ function AssignModal({data, value, setValue, opened, setOpened, assignFunc, skip
                     onChange={(event) => setValue(event.currentTarget.value)}
                     /> 
                     
-                    <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly"}}>
+                    <div style={{display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-evenly", marginTop: 20}}>
                         <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => assignFunc()}>
                             Assign
                         </Button>

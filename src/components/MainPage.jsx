@@ -13,6 +13,9 @@ import {
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MainScreen from './MainScreen';
+import { Preferences } from '@capacitor/preferences';
+import config from '../config';
+import axios from 'axios';
 
 export default function MainPage() {
 
@@ -26,9 +29,50 @@ export default function MainPage() {
 
   const navigate = useNavigate()
 
+  useEffect(() => {getSelf()}, [])
+
+  // set object
+  async function setObject(key, object) {
+    await Preferences.set({
+        key: key,
+        value: JSON.stringify(object),
+    })
+        .then((res) => {
+            console.log({ res: res, msg: `Saved object succesfully` });
+            localStorage.setItem(key, JSON.stringify(object));
+            // navigate('/mainpage')
+        })
+        .catch((err) => console.log(err));
+  }
+
+  function getSelf() {
+    axios
+      .get(`${config.backendLocation}/user/self`, {headers: {token : localStorage.getItem('token')}})
+      .then(res => {
+        console.log(res.data)
+        // localStorage.setItem('user', JSON.stringify(res.data))
+        setObject('user', res.data)
+        // navigate('/mainpage')
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  // clear storage
+  async function clearStorage() {
+    const ret = await Preferences.clear()
+      .then((res) => {
+      console.log({ res: res, msg: `Cleared Storage succesfully` });
+      localStorage.clear();
+      navigate('/')
+      })
+      .catch((err) => console.log(err));
+  }
+
   function logout() {
-    localStorage.clear()
-    navigate('/')
+    clearStorage()
+    // localStorage.clear()
   }
 
   // useEffect(() => {console.log(screen)}, [screen])

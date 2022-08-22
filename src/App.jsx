@@ -6,12 +6,27 @@ import ShoppingLists from "./components/MainPage/ShoppingLists"
 import OTPScreen from "./components/OTPScreen";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { Preferences } from "@capacitor/preferences";
+
 
 function App() {
-
+	
 	const navigate = useNavigate()
 
+	async function getToken() {
+		const ret = Preferences.get({key : 'token'})
+			.then(res => {
+				console.log({response : res})
+				if(res.value != null) {
+					localStorage.setItem('token', res.value)
+					navigate('mainpage')
+				}
+			})
+			.catch(err => console.log({error : err}))
+	}
+
 	useEffect(() => {
+		getToken()
 		if(localStorage.token) {
 			navigate('mainpage')
 		}
