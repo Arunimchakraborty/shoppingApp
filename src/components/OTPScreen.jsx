@@ -6,6 +6,7 @@ import config from "../config";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Preferences } from "@capacitor/preferences";
+import { showNotification } from '@mantine/notifications';
 
 export default function OTPScreen() {
 
@@ -15,6 +16,8 @@ export default function OTPScreen() {
 
     const [errorModal, setErrorModal] = useState(false)
     const [errormsg, setErrorMsg] = useState()
+
+    const [notif, showNotif] = useState(false)
 
     const navigate = useNavigate()
 
@@ -58,6 +61,16 @@ export default function OTPScreen() {
 			localStorage.clear();
 		})
 		.catch((err) => console.log(err));
+    }
+
+    function generateOTP() {
+        axios.post(`${config.backendLocation}/auth/generate-otp`, {
+            email: email
+        })
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => console.log(err))
     }
 
     function verifyOTP() {
@@ -147,6 +160,17 @@ export default function OTPScreen() {
                 size="xl"
                 radius={"sm"}
                 />
+            </div>
+            <div style={{paddingTop: 20, display: 'flex', width: "100%", justifyContent: "flex-end"}}>
+                <Button variant="subtle" color="gray" onClick={() => {
+                    showNotification({
+                        title: 'OTP sent',
+                        message: `OTP sent to ${email}`,
+                    })
+                    generateOTP()
+                }}>
+                    Resend OTP
+                </Button>
             </div>
             <div style={style.centerButton}>
                 <Button color="dark" size="md" style={{width: "50%"}} onClick={() => {verifyOTP()}}>
