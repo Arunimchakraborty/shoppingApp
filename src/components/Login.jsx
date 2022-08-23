@@ -8,6 +8,7 @@ import config from '../config';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Preferences } from '@capacitor/preferences';
+import BackButton from './BackButton';
 export default function Login(){
 
     const navigate = useNavigate()
@@ -93,6 +94,9 @@ export default function Login(){
 
     return(
         <div style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 30, paddingRight: 30}}>
+            <div style={{position: "absolute", top: 10, left: 10}}>
+                <BackButton onClick={() => {navigate('../')}} />
+            </div>
             <div style={{display: "flex", width: "100%", justifyContent: "center",paddingTop: 20, paddingBottom: 40 }}>
                 <Title order={1}>Login</Title>
             </div>

@@ -6,6 +6,7 @@ import { List } from '@mantine/core';
 import axios from "axios";
 import config from "../config";
 import { useNavigate } from "react-router-dom";
+import BackButton from "./BackButton";
 
 export default function NewList({list, setList}) {
 
@@ -53,6 +54,9 @@ export default function NewList({list, setList}) {
 
     return(
         <div >
+            <div style={{position: "absolute", top: 10, left: 10}}>
+                <BackButton onClick={() => {navigate('../')}} />
+            </div>
             <div style={{width: "100%", justifyContent: "center", display: "flex"}} >
                 <h2>Create New List</h2>
             </div>

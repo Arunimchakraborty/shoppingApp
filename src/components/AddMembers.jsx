@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import config from "../config";
+import BackButton from "./BackButton";
 import ErrorModal from "./Error";
 
 export default function AddMember(){
@@ -71,6 +72,9 @@ export default function AddMember(){
   const [email, setEmail] = useInputState()
   return (
     <div>
+      <div style={{position: "absolute", top: 10, left: 10}}>
+        <BackButton onClick={() => {navigate('../')}} />
+      </div>
 
       <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
         <h1>Add Member</h1> 

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../config";
+import BackButton from "./BackButton";
 import ErrorModal from "./Error";
 
 export default function NewFamily(){
@@ -52,6 +53,9 @@ export default function NewFamily(){
 
   return (
     <div>
+      <div style={{position: "absolute", top: 10, left: 10}}>
+        <BackButton onClick={() => {navigate('../')}} />
+      </div>
 
       <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
         <h1>New Family</h1> 

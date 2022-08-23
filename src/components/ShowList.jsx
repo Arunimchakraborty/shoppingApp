@@ -2,14 +2,16 @@ import { List, Text } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import config from "../config";
+import BackButton from "./BackButton";
 
 export default function ShowList() {
     const location = useLocation()
     const locationArray = location.pathname.split('/')
     const id = locationArray.splice(-1)
     const [list, setList] = useState()
+    const navigate = useNavigate()
     useEffect(() => {
         axios
         .get(`${config.backendLocation}/list/getlist/${id}`, 
@@ -32,6 +34,9 @@ export default function ShowList() {
     return(
         list != undefined ? 
         <div style={{paddingTop: 20}}>
+            <div style={{position: "absolute", top: 10, left: 10}}>
+                <BackButton onClick={() => {navigate('../')}} />
+            </div>
             <h2 style={{textAlign: "center"}}>List Summary</h2>
             <div style={{marginBottom: 10}}>
                 {/* <div>

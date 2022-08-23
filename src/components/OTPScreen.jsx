@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Preferences } from "@capacitor/preferences";
 import { showNotification } from '@mantine/notifications';
+import BackButton from "./BackButton";
 
 export default function OTPScreen() {
 
@@ -148,6 +149,9 @@ export default function OTPScreen() {
 
     return (
         <div style={{paddingTop: 20}}>
+            <div style={{position: "absolute", top: 10, left: 10}}>
+                <BackButton onClick={() => {navigate('../')}} />
+            </div>
             <div style={style.center}>
                 <h1>Enter OTP</h1>
             </div>
