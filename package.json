@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^4.1.0",
+    "@capacitor/core": "^4.1.0",
+    "@capacitor/ios": "^4.1.0",
     "@capacitor/preferences": "^4.0.1",
     "@emotion/react": "^11.10.0",
     "@mantine/core": "^5.0.2",
@@ -43,5 +46,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^4.1.0"
   }
 }
