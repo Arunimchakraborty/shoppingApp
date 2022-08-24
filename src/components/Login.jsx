@@ -1,4 +1,4 @@
-import { Button, Input, Modal, useMantineTheme } from '@mantine/core';
+import { Button, Input, LoadingOverlay, Modal, useMantineTheme } from '@mantine/core';
 import { IconAt, IconEyeCheck, IconEyeOff } from '@tabler/icons';
 import { PasswordInput } from '@mantine/core';
 import { Title } from '@mantine/core';
@@ -18,6 +18,8 @@ export default function Login(){
 
     const [errorModal, setErrorModal] = useState(false)
     const [errormsg, setErrorMsg] = useState()
+
+    const [loading, setLoading] = useState(false)
 
     // set item
     async function setItem(key, item) {
@@ -42,6 +44,7 @@ export default function Login(){
             .then((res) => {
                 console.log({ res: res, msg: `Saved object succesfully` });
                 localStorage.setItem(key, JSON.stringify(object));
+                // setLoading(false)
                 navigate('/mainpage')
             })
             .catch((err) => console.log(err));
@@ -74,6 +77,7 @@ export default function Login(){
     }
 
     function login() {
+        setLoading(true)
         axios.post(`${config.backendLocation}/auth/login`, {
             email: email,
             password: password
@@ -94,6 +98,7 @@ export default function Login(){
 
     return(
         <div style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 30, paddingRight: 30}}>
+            <LoadingOverlay visible={loading} overlayBlur={2} transitionDuration={100}/>
             <div style={{position: "absolute", top: 10, left: 10}}>
                 <BackButton onClick={() => {navigate('../')}} />
             </div>

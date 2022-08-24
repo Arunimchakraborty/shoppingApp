@@ -1,4 +1,4 @@
-import { Anchor, Button, NativeSelect, Tabs, Text } from "@mantine/core";
+import { Anchor, Button, NativeSelect, Tabs, Text, LoadingOverlay } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -20,32 +20,39 @@ export default function ShoppingLists() {
     const [firstScreen, setFirstScreen] = useState(true)
     const [screen, setScreen] = useState(0)
     const [id, setID] = useState(0)
+    const [loading, SetLoading] = useState(true)
     useEffect(() => {
 
+        SetLoading(true)
         axios
         .get(`${config.backendLocation}/list/creator`, {headers: {token : localStorage.getItem('token')}})
-        .then(res => setShoppingLists(res.data))
+        .then(res => {setShoppingLists(res.data); SetLoading(false)})
         .catch(err => console.log(err))
 
+        SetLoading(true)
         axios
         .get(`${config.backendLocation}/family/user`, {headers: {token : localStorage.getItem('token')}})
         .then(res => {
             console.log(res)
             setFamily(res.data)
             setSelectedFamily(res.data[0].name)
+            SetLoading(false)
         })
     }, [])
 
     useEffect(() => {
+            SetLoading(true)
             // setSelectedFamily(family[0].name)
             if(screen == 0) {
+                // SetLoading(true)
                 // console.log(family)
                 axios
                 .get(`${config.backendLocation}/list/creator`, {headers: {token : localStorage.getItem('token')}})
-                .then(res => setShoppingLists(res.data))
+                .then(res => {setShoppingLists(res.data); SetLoading(false)})
                 .catch(err => console.log(err))
             }
             else {
+                // SetLoading(true)
                 // console.log(family.filter(e => e.name == "Main Family")[0].name)
                 // console.log(family[0].name)
                 // console.log(selectedFamily)
@@ -53,7 +60,7 @@ export default function ShoppingLists() {
                     axios
                     .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
                         {headers: {token : localStorage.getItem('token')}})
-                    .then(res => setShoppingLists(res.data))
+                    .then(res => {setShoppingLists(res.data); SetLoading(false)})
                     .catch(err => console.log(err))
                 : console.log('Nothing found')
             }
@@ -61,11 +68,12 @@ export default function ShoppingLists() {
         , [screen])
 
     useEffect(() => {
+        SetLoading(true)
         selectedFamily ?
         (axios
         .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
             {headers: {token : localStorage.getItem('token')}})
-        .then(res => setShoppingLists(res.data))
+        .then(res => {setShoppingLists(res.data); SetLoading(false)})
         .catch(err => console.log(err)))
         : console.log('undefined selectedfamily')
     }, [selectedFamily])
@@ -77,6 +85,7 @@ export default function ShoppingLists() {
     const navigate = useNavigate();
     return (
         <div>
+            <LoadingOverlay visible={loading} overlayBlur={2} transitionDuration={100}/>
             <Tabs defaultValue="self">
                 <Tabs.List>
                     <Tabs.Tab value="self" onClick={() => {setScreen(0); setFirstScreen(false)}}>Self</Tabs.Tab>

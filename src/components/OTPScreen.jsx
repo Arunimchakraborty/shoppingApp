@@ -1,4 +1,4 @@
-import { Button, Modal, NumberInput, useMantineTheme } from "@mantine/core";
+import { Button, Input, LoadingOverlay, Modal, NumberInput, useMantineTheme } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useInputState } from '@mantine/hooks';
 import axios from "axios";
@@ -17,6 +17,8 @@ export default function OTPScreen() {
 
     const [errorModal, setErrorModal] = useState(false)
     const [errormsg, setErrorMsg] = useState()
+
+    const [loading, setLoading] = useState(false)
 
     const [notif, showNotif] = useState(false)
 
@@ -91,7 +93,10 @@ export default function OTPScreen() {
         })
     }
 
+    useEffect(() => {console.log(otp)}, [otp])
+
     function login() {
+        setLoading(true)
         axios.post(`${config.backendLocation}/auth/login`, {
             email: email,
             password: localStorage.getItem('password')
@@ -113,6 +118,7 @@ export default function OTPScreen() {
             // localStorage.clear()
             setItem('token', res.data.token)
             // localStorage.setItem('token', res.data.token)
+            setLoading(false)
         })
         .catch(err => {
             console.log(err)
@@ -132,6 +138,7 @@ export default function OTPScreen() {
     //   }
 
     function getSelf() {
+        setLoading(true)
         axios
           .get(`${config.backendLocation}/user/self`, {headers: {token : localStorage.getItem('token')}})
           .then(res => {
@@ -139,6 +146,7 @@ export default function OTPScreen() {
             // localStorage.setItem('user', JSON.stringify(res.data))
             setObject('user', res.data)
             // navigate('/mainpage')
+            setLoading(false)
           })
           .catch(err => {
             console.log(err)
@@ -148,40 +156,44 @@ export default function OTPScreen() {
     }
 
     return (
-        <div style={{paddingTop: 20}}>
-            <div style={{position: "absolute", top: 10, left: 10}}>
-                <BackButton onClick={() => {navigate('../')}} />
+        <div>
+            <div style={{paddingTop: 20}}>
+                <LoadingOverlay visible={loading} overlayBlur={2} transitionDuration={100}/>
+                <div style={{position: "absolute", top: 10, left: 10}}>
+                    <BackButton onClick={() => {navigate('../')}} />
+                </div>
+                <div style={style.center}>
+                    <h1>Enter OTP</h1>
+                </div>
+                <div style={style.center}>
+                    <Input
+                    value={otp} onChange={setOtp}
+                    placeholder="Enter OTP"
+                    maxLength={4}
+                    style={{width: "75%", paddingTop: 20, borderRadius: 20}}
+                    size="xl"
+                    radius={"sm"}
+                    />
+                </div>
+                <div style={{paddingTop: 20, display: 'flex', width: "100%", justifyContent: "flex-end"}}>
+                    <Button variant="subtle" color="gray" onClick={() => {
+                        showNotification({
+                            title: 'OTP sent',
+                            message: `OTP sent to ${email}`,
+                        })
+                        generateOTP()
+                    }}>
+                        Resend OTP
+                    </Button>
+                </div>
+                <div style={style.centerButton}>
+                    <Button color="dark" size="md" style={{width: "50%"}} onClick={() => {verifyOTP()}}>
+                        Verify
+                    </Button>
+                </div>
+                <ErrorModal setVisible={setErrorModal} visible={errorModal} msg={errormsg}  />
             </div>
-            <div style={style.center}>
-                <h1>Enter OTP</h1>
-            </div>
-            <div style={style.center}>
-                <NumberInput
-                value={otp} onChange={setOtp}
-                placeholder="Enter OTP"
-                maxLength={4}
-                style={{width: "75%", paddingTop: 20, borderRadius: 20}}
-                size="xl"
-                radius={"sm"}
-                />
-            </div>
-            <div style={{paddingTop: 20, display: 'flex', width: "100%", justifyContent: "flex-end"}}>
-                <Button variant="subtle" color="gray" onClick={() => {
-                    showNotification({
-                        title: 'OTP sent',
-                        message: `OTP sent to ${email}`,
-                    })
-                    generateOTP()
-                }}>
-                    Resend OTP
-                </Button>
-            </div>
-            <div style={style.centerButton}>
-                <Button color="dark" size="md" style={{width: "50%"}} onClick={() => {verifyOTP()}}>
-                    Verify
-                </Button>
-            </div>
-            <ErrorModal setVisible={setErrorModal} visible={errorModal} msg={errormsg}  />
+            
         </div>
     )
 }

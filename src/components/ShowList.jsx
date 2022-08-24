@@ -1,4 +1,4 @@
-import { List, Text } from "@mantine/core";
+import { List, LoadingOverlay, Text } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -11,14 +11,17 @@ export default function ShowList() {
     const locationArray = location.pathname.split('/')
     const id = locationArray.splice(-1)
     const [list, setList] = useState()
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
     useEffect(() => {
+        setLoading(true)
         axios
         .get(`${config.backendLocation}/list/getlist/${id}`, 
             {headers: {token : localStorage.getItem('token')}})
         .then(res => {
             console.log(res)
             setList(res.data)
+            setLoading(false)
         })
         .catch(err => console.log(err))
     }, [])
@@ -32,37 +35,41 @@ export default function ShowList() {
     //     date: new Date().toISOString()
     // }
     return(
-        list != undefined ? 
-        <div style={{paddingTop: 20}}>
+        list != undefined ?
+        <div>
+            <div style={{paddingTop: 20, position: "relative"}}>
+                <LoadingOverlay visible={loading} overlayBlur={2} transitionDuration={100}/>
+                
+                <h2 style={{textAlign: "center"}}>List Summary</h2>
+                <div style={{marginBottom: 10}}>
+                    {/* <div>
+                        <Text size={'sm'}>Added By {list.user}</Text>
+                    </div> */}
+                    {/* <div>
+                        <Text size={'xs'}>Added at {list.createdAt}</Text>
+                    </div> */}
+                </div>
+                <List>
+                    {list.items.map((val, index) => {
+                        return(
+                            <div style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, marginBottom: 20, backgroundColor: "#F4F6F7", borderRadius: 10, width: "85%"}} key={index}>
+                                <Text>{val.name}</Text>
+                                <Text>{val.value} {val.unit}</Text>
+                            </div>
+                        )
+                    })}
+                </List>
+                <div style={{paddingTop: 30}}>
+                    <Text>Assigned To : {list.assignedTo ?list.assignedTo.name : "None"}</Text>
+                </div>
+                <div style={{paddingTop: 30}}>
+                    <Text>Created by : {list.creator.firstName} {list.creator.lastName}</Text>
+                </div>
+            </div> 
             <div style={{position: "absolute", top: 10, left: 10}}>
-                <BackButton onClick={() => {navigate('../')}} />
+                    <BackButton onClick={() => {navigate('../')}} />
             </div>
-            <h2 style={{textAlign: "center"}}>List Summary</h2>
-            <div style={{marginBottom: 10}}>
-                {/* <div>
-                    <Text size={'sm'}>Added By {list.user}</Text>
-                </div> */}
-                {/* <div>
-                    <Text size={'xs'}>Added at {list.createdAt}</Text>
-                </div> */}
-            </div>
-            <List>
-                {list.items.map((val, index) => {
-                    return(
-                        <div style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, marginBottom: 20, backgroundColor: "#F4F6F7", borderRadius: 10, width: "85%"}} key={index}>
-                            <Text>{val.name}</Text>
-                            <Text>{val.value} {val.unit}</Text>
-                        </div>
-                    )
-                })}
-            </List>
-            <div style={{paddingTop: 30}}>
-                <Text>Assigned To : {list.assignedTo ?list.assignedTo.name : "None"}</Text>
-            </div>
-            <div style={{paddingTop: 30}}>
-                <Text>Created by : {list.creator.firstName} {list.creator.lastName}</Text>
-            </div>
-        </div> 
+        </div>
     : null
     )
 }

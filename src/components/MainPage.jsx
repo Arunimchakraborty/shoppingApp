@@ -9,6 +9,7 @@ import {
   Burger,
   useMantineTheme,
   Button,
+  LoadingOverlay
 } from '@mantine/core';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -22,6 +23,7 @@ export default function MainPage() {
   const date = new Date()
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const [loading, SetLoading] = useState(true)
 
   const user = JSON.parse(localStorage.getItem('user'))
 
@@ -53,6 +55,7 @@ export default function MainPage() {
         // localStorage.setItem('user', JSON.stringify(res.data))
         setObject('user', res.data)
         // navigate('/mainpage')
+        SetLoading(false)
       })
       .catch(err => {
         console.log(err)
@@ -150,7 +153,8 @@ export default function MainPage() {
           </Header>
         }
       >
-        <MainScreen screen={screen} />
+          <LoadingOverlay visible={loading} overlayBlur={2} transitionDuration={100}/>
+          <MainScreen screen={screen} />  
       </AppShell>
   );
 }
