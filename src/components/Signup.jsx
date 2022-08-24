@@ -1,4 +1,4 @@
-import { Button, Input, NumberInput } from '@mantine/core';
+import { Button, Input, LoadingOverlay, NumberInput } from '@mantine/core';
 import { IconAt, IconEyeCheck, IconEyeOff, IconKey, IconPhone } from '@tabler/icons';
 import { PasswordInput } from '@mantine/core';
 import { Title } from '@mantine/core';
@@ -22,9 +22,12 @@ export default function Signup(){
     const [errorModal, setErrorModal] = useState(false)
     const [errormsg, setErrorMsg] = useState()
 
+    const [loading, setLoading] = useState(false)
+
     const navigate = useNavigate()
 
     function signUpAxios() {
+        setLoading(true)
         axios
         .post(`${config.backendLocation}/auth/register`, {
             firstName: firstName,
@@ -42,6 +45,7 @@ export default function Signup(){
         )
         .catch(
             (err) => {
+                setLoading(false)
                 console.log(err)
                 setErrorMsg(err.response.data.msg)
                 setErrorModal(true)
@@ -62,6 +66,7 @@ export default function Signup(){
         [firstName,lastName,phoneNumber,email,password])
     return(
         <div style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 30, paddingRight: 30}}>
+            <LoadingOverlay visible={loading} overlayBlur={2} transitionDuration={100}/>
             <div style={{position: "absolute", top: 10, left: 10}}>
                 <BackButton onClick={() => {navigate('../')}} />
             </div>

@@ -118,9 +118,10 @@ export default function OTPScreen() {
             // localStorage.clear()
             setItem('token', res.data.token)
             // localStorage.setItem('token', res.data.token)
-            setLoading(false)
+            // setLoading(false)
         })
         .catch(err => {
+            setLoading(false)
             console.log(err)
             setErrorMsg(err.response.data.msg)
             setErrorModal(true)
@@ -146,9 +147,9 @@ export default function OTPScreen() {
             // localStorage.setItem('user', JSON.stringify(res.data))
             setObject('user', res.data)
             // navigate('/mainpage')
+        })
+        .catch(err => {
             setLoading(false)
-          })
-          .catch(err => {
             console.log(err)
             setErrorMsg(err.response.data.msg)
             setErrorModal(true)
@@ -172,6 +173,7 @@ export default function OTPScreen() {
                     maxLength={4}
                     style={{width: "75%", paddingTop: 20, borderRadius: 20}}
                     size="xl"
+                    type={'number'}
                     radius={"sm"}
                     />
                 </div>

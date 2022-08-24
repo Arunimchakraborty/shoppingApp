@@ -20,7 +20,7 @@ export default function ShoppingLists() {
     const [firstScreen, setFirstScreen] = useState(true)
     const [screen, setScreen] = useState(0)
     const [id, setID] = useState(0)
-    const [loading, SetLoading] = useState(true)
+    const [loading, SetLoading] = useState(false)
     useEffect(() => {
 
         SetLoading(true)
@@ -41,17 +41,20 @@ export default function ShoppingLists() {
     }, [])
 
     useEffect(() => {
-            SetLoading(true)
+            
             // setSelectedFamily(family[0].name)
             if(screen == 0) {
+                SetLoading(true)
                 // SetLoading(true)
                 // console.log(family)
                 axios
                 .get(`${config.backendLocation}/list/creator`, {headers: {token : localStorage.getItem('token')}})
                 .then(res => {setShoppingLists(res.data); SetLoading(false)})
-                .catch(err => console.log(err))
+                .catch(err => {console.log(err); SetLoading(false)})
             }
             else {
+                SetLoading(true)
+                if(family.length == 0) SetLoading(false)
                 // SetLoading(true)
                 // console.log(family.filter(e => e.name == "Main Family")[0].name)
                 // console.log(family[0].name)
@@ -61,7 +64,7 @@ export default function ShoppingLists() {
                     .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
                         {headers: {token : localStorage.getItem('token')}})
                     .then(res => {setShoppingLists(res.data); SetLoading(false)})
-                    .catch(err => console.log(err))
+                    .catch(err => {console.log(err); SetLoading(false)})
                 : console.log('Nothing found')
             }
         }
@@ -74,7 +77,7 @@ export default function ShoppingLists() {
         .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
             {headers: {token : localStorage.getItem('token')}})
         .then(res => {setShoppingLists(res.data); SetLoading(false)})
-        .catch(err => console.log(err)))
+        .catch(err => {console.log(err); SetLoading(false)}))
         : console.log('undefined selectedfamily')
     }, [selectedFamily])
 
@@ -93,7 +96,7 @@ export default function ShoppingLists() {
                 </Tabs.List>
 
                 <Tabs.Panel value="self" pt="xs">
-                    <SelfList shoppingLists={shoppingLists} navigate={navigate} /> 
+                    <SelfList shoppingLists={shoppingLists} navigate={navigate} SetLoading={SetLoading} /> 
                 </Tabs.Panel>
 
                 <Tabs.Panel value="family" pt="xs">
@@ -103,6 +106,7 @@ export default function ShoppingLists() {
                     setValue={setSelectedFamily} 
                     value={selectedFamily} 
                     navigate={navigate} 
+                    SetLoading={SetLoading}
                     />
                 </Tabs.Panel>
             </Tabs>
@@ -112,7 +116,7 @@ export default function ShoppingLists() {
     )
 }
 
-function SelfList({shoppingLists, navigate}){
+function SelfList({shoppingLists, navigate, SetLoading}){
     // let month = 0
     // let day = 0
     // let year = 0
@@ -132,7 +136,7 @@ function SelfList({shoppingLists, navigate}){
                     style={{paddingTop: 20, paddingBottom: 20, backgroundColor: "#ECF0F1", 
                         width: "90%", marginBottom: 10, paddingLeft: 20, 
                         paddingRight: 10, borderRadius: 10}}
-                    onClick={() => navigate(`/showlist/${item._id}`)}
+                    onClick={() => {SetLoading(true);navigate(`/showlist/${item._id}`)}}
                     >
                         <Text size={'md'}>Date - {parsedDate.getDate()} {months[parsedDate.getMonth()]} {parsedDate.getFullYear()}</Text>
                         <Text size={'sm'}>Time - {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
@@ -152,7 +156,7 @@ function SelfList({shoppingLists, navigate}){
     )
 }
 
-function FamilyList({data, value, setValue, shoppingLists, navigate}) {
+function FamilyList({data, value, setValue, shoppingLists, navigate, SetLoading}) {
     let parsedDate = 0;
     // var tzoffset = (new Date()).getTimezoneOffset() * 60000; // timezone offset in milliseconds
     return(
@@ -174,7 +178,7 @@ function FamilyList({data, value, setValue, shoppingLists, navigate}) {
                         const parsedDate = new Date(item.createdAt)
                         return(
                                 <div key={index} style={{paddingTop: 20, paddingBottom: 20, backgroundColor: "#ECF0F1", width: "90%", marginBottom: 10, paddingLeft: 20, paddingRight: 10, borderRadius: 10}}
-                                    onClick={() => navigate(`/showlist/${item._id}`)}
+                                    onClick={() => {SetLoading(true);navigate(`/showlist/${item._id}`)}}
                                 >
                                     <Text size={'md'}>Date - {parsedDate.getDate()} {months[parsedDate.getMonth()]} {parsedDate.getFullYear()}</Text>
                                     <Text size={'sm'}>Time - {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
