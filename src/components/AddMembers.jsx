@@ -1,6 +1,6 @@
 import { ActionIcon, Button, Input, List, LoadingOverlay, Text } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
-import { IconAt, IconPlus } from "@tabler/icons";
+import { IconAt, IconEdit, IconPlus, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -141,8 +141,31 @@ export default function AddMember(){
 
 function Items({email}) {
   return(
-      <div style={{display: "flex", marginLeft: 10, paddingLeft: 30, justifyContent: "flex-start", paddingTop: 10, paddingBottom: 10, backgroundColor: "#F4F6F7", marginRight: 10, borderRadius: 10, marginBottom: 10}}>
+      <div style={{paddingTop: 20, 
+      paddingBottom: 20, 
+      paddingLeft: 20, 
+      marginBottom: 20, 
+      backgroundColor: "#F4F6F7", 
+      borderRadius: 10, 
+      paddingRight: 20,
+      width: "95%",
+      display: 'flex',
+      flexDirection: "row",
+      justifyContent: "space-between",
+      position: "relative"}}>  
+        <div>
           <List.Item>{email}</List.Item>
+        </div>
+        {/* <div style={{position: "absolute", right: 70, top: "30%"}}>
+          <ActionIcon variant="filled">
+            <IconEdit size={18} />
+          </ActionIcon>
+        </div> */}
+        <div style={{position: "absolute", right: 30, top: "30%"}}>
+          <ActionIcon variant="filled" color={'red'}>
+            <IconTrash size={18} />
+          </ActionIcon>
+        </div>
       </div>
   )
 }
