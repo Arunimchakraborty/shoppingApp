@@ -1,4 +1,5 @@
-import { List, LoadingOverlay, Text } from "@mantine/core";
+import { ActionIcon, List, LoadingOverlay, Text } from "@mantine/core";
+import { IconEdit } from "@tabler/icons";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -52,9 +53,30 @@ export default function ShowList() {
                 <List>
                     {list.items.map((val, index) => {
                         return(
-                            <div style={{paddingTop: 20, paddingBottom: 20, paddingLeft: 20, marginBottom: 20, backgroundColor: "#F4F6F7", borderRadius: 10, width: "85%"}} key={index}>
-                                <Text>{val.name}</Text>
-                                <Text>{val.value} {val.unit}</Text>
+                            <div 
+                            style={{paddingTop: 20, 
+                            paddingBottom: 20, 
+                            paddingLeft: 20, 
+                            marginBottom: 20, 
+                            backgroundColor: "#F4F6F7", 
+                            borderRadius: 10, 
+                            paddingRight: 20,
+                            width: "95%",
+                            display: 'flex',
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            position: "relative"
+                            }} 
+                            key={index}>
+                                <div>
+                                    <Text>{val.name}</Text>
+                                    <Text>{val.value} {val.unit}</Text>
+                                </div>
+                                <div style={{position: "absolute", right: 30, top: "30%"}}>
+                                    <ActionIcon variant="filled">
+                                        <IconEdit size={18} />
+                                    </ActionIcon>
+                                </div>
                             </div>
                         )
                     })}

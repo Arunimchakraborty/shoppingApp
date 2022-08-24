@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Group, Input, NumberInput, Text, NumberInputHandlers, NativeSelect, Modal, Autocomplete } from "@mantine/core";
+import { ActionIcon, Button, Group, Input, NumberInput, Text, NumberInputHandlers, NativeSelect, Modal, Autocomplete, ScrollArea } from "@mantine/core";
 import { useEffect } from "react";
 import { useRef, useState } from "react";
 import { useInputState } from '@mantine/hooks';
@@ -7,6 +7,7 @@ import axios from "axios";
 import config from "../config";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
+import { IconEdit, IconTrash } from "@tabler/icons";
 
 export default function NewList({list, setList}) {
 
@@ -19,6 +20,7 @@ export default function NewList({list, setList}) {
     const [assignModal, setAssignModal] = useInputState(false);
     const [family, setFamily] = useState([])
     const [selectedFamily, setSelectedFamily] = useState()
+
 
     useEffect(() => {
         axios
@@ -60,26 +62,29 @@ export default function NewList({list, setList}) {
             <div style={{width: "100%", justifyContent: "center", display: "flex"}} >
                 <h2>Create New List</h2>
             </div>
-            <List type="ordered">
-                {items.map((val, index) => {
-                    return(
-                           <Items item={val} /> 
-                    )
-                })}
-            </List>
-            <div style={{display: 'flex', flexDirection: "row", paddingTop: 10}}>
-                <Input placeholder="Name of item" style={{width: "60%", paddingLeft: 10}} onChange={setItemName} value={itemName} />
-                <div style={{paddingLeft: 10, paddingRight: 10}}>
-                    <Quantity value={value} setValue={setValue} setUnit={setUnit} unit={unit} />
+            <ScrollArea type="never" style={{height: window.innerHeight - 150}}>
+                <List type="ordered">
+                    {items.map((val, index) => {
+                        return(
+                            <Items item={val} /> 
+                        )
+                    })}
+                </List>
+                <div style={{display: 'flex', flexDirection: "row", paddingTop: 10}}>
+                    <Input placeholder="Name of item" style={{width: "60%", paddingLeft: 10}} onChange={setItemName} value={itemName} />
+                    <div style={{paddingLeft: 10, paddingRight: 10}}>
+                        <Quantity value={value} setValue={setValue} setUnit={setUnit} unit={unit} />
+                    </div>
                 </div>
-            </div>
-            <div style={{display: "flex", justifyContent: "center", paddingTop: 10}}>
-                <AddButton onClick={() => {
-                    setItems([...items, {name: itemName, value: value, unit: unit}]); 
-                    setItemName(''); 
-                    setValue(1)
-                }} />
-            </div>
+                <div style={{display: "flex", justifyContent: "center", paddingTop: 10}}>
+                    <AddButton onClick={() => {
+                        setItems([...items, {name: itemName, value: value, unit: unit}]); 
+                        setItemName(''); 
+                        setValue(1)
+                    }} />
+                </div>
+                
+            </ScrollArea>
             <div style={{display: "flex", flexDirection: 'row', width: "100%", justifyContent: "space-evenly", position: "fixed", bottom: 10}}>
                 <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => {items.length!=0 ? setAssignModal(true) : console.log('Add Some Items First')}}>
                     Add
@@ -105,8 +110,34 @@ export default function NewList({list, setList}) {
 
 function Items({item}) {
     return(
-        <div style={{display: "flex", marginLeft: 10, paddingLeft: 30, justifyContent: "flex-start", paddingTop: 10, paddingBottom: 10, backgroundColor: "#F4F6F7", marginRight: 10, borderRadius: 10, marginBottom: 10}}>
-            <List.Item>{item.name} - {item.value} {item.unit}</List.Item>
+        <div 
+        style={{paddingTop: 20, 
+            paddingBottom: 20, 
+            paddingLeft: 20, 
+            marginBottom: 20, 
+            backgroundColor: "#F4F6F7", 
+            borderRadius: 10, 
+            paddingRight: 20,
+            width: "95%",
+            display: 'flex',
+            flexDirection: "row",
+            justifyContent: "space-between",
+            position: "relative"
+        }}
+        >
+            <div>
+                <List.Item>{item.name} - {item.value} {item.unit}</List.Item>
+            </div>
+            <div style={{position: "absolute", right: 70, top: "30%"}}>
+                <ActionIcon variant="filled">
+                    <IconEdit size={18} />
+                </ActionIcon>
+            </div>
+            <div style={{position: "absolute", right: 30, top: "30%"}}>
+                <ActionIcon variant="filled" color={'red'}>
+                    <IconTrash size={18} />
+                </ActionIcon>
+            </div>
         </div>
     )
 }
