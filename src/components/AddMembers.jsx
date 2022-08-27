@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Input, List, LoadingOverlay, Text } from "@mantine/core";
+import { ActionIcon, Button, Input, List, LoadingOverlay, ScrollArea, Text } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { IconAt, IconEdit, IconPlus, IconTrash } from "@tabler/icons";
 import axios from "axios";
@@ -97,31 +97,35 @@ export default function AddMember(){
           <h3>Add Members Email Addresses</h3>
         </div>
 
-        <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
-          <Input
-          icon={<IconAt />}
-          placeholder="Enter email"
-          value={email}
-          onChange={setEmail}
-          />
-        </div>
-        {/* <div style={{width: "100%", display: "flex", justifyContent: "center", paddingTop: 20, paddingBottom: 20,  paddingRight: 10, height: 40}}>
-          <div style={{width: "80%", paddingLeft: 20, paddingTop: 10, backgroundColor: "#F4F6F7", borderRadius: 10}}>
-            <Text>Hello</Text>
+        <ScrollArea type="never" style={{height: window.innerHeight - 150}}>
+
+          <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
+            <Input
+            icon={<IconAt />}
+            placeholder="Enter email"
+            value={email}
+            onChange={setEmail}
+            />
           </div>
-        </div> */}
-        <div style={{paddingTop: 20}}>
-          <List>
-            {family ?family.map(val => {return(
-              <Items email={val.email} />
-            )}) : null}
-          </List>
-        </div>
-        <div style={{width: "100%", display: "flex", justifyContent: "center", paddingTop: 20}}>
-          <ActionIcon color="dark" size="lg" radius="xl" variant="filled" onClick={() => {getUserData()}}>
-            <IconPlus />
-          </ActionIcon> 
-        </div>
+          {/* <div style={{width: "100%", display: "flex", justifyContent: "center", paddingTop: 20, paddingBottom: 20,  paddingRight: 10, height: 40}}>
+            <div style={{width: "80%", paddingLeft: 20, paddingTop: 10, backgroundColor: "#F4F6F7", borderRadius: 10}}>
+              <Text>Hello</Text>
+            </div>
+          </div> */}
+          <div style={{paddingTop: 20}}>
+            <List>
+              {family ?family.map(val => {return(
+                <Items email={val.email} />
+              )}) : null}
+            </List>
+          </div>
+          <div style={{width: "100%", display: "flex", justifyContent: "center", paddingTop: 20}}>
+            <ActionIcon color="dark" size="lg" radius="xl" variant="filled" onClick={() => {getUserData()}}>
+              <IconPlus />
+            </ActionIcon> 
+          </div>
+          
+        </ScrollArea>
         <div style={{display: "flex", flexDirection: 'row', width: "100%", justifyContent: "space-evenly", position: "fixed", bottom: 10}}>
           <Button color="dark" style={{width: "40%", borderWidth: 0}} onClick={() => {addMembers()}}>
               Add

@@ -32,7 +32,7 @@ export default function Login(){
 			localStorage.setItem(key, item);
             getSelf()
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {console.log(err); setLoading(false)});
     }
 
     // set object
@@ -47,7 +47,7 @@ export default function Login(){
                 // setLoading(false)
                 navigate('/mainpage')
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {console.log(err); setLoading(false)});
     }
 
     // clear storage
@@ -57,7 +57,7 @@ export default function Login(){
 			console.log({ res: res, msg: `Cleared Storage succesfully` });
 			localStorage.clear();
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {console.log(err); setLoading(false)});
     }
 
     function getSelf() {
@@ -70,6 +70,7 @@ export default function Login(){
             // navigate('/mainpage')
           })
           .catch(err => {
+            setLoading(false)
             console.log(err)
             setErrorMsg(err.response.data.msg)
             setErrorModal(true)
@@ -90,6 +91,7 @@ export default function Login(){
             // localStorage.setItem('token', res.data.token)
         })
         .catch(err => {
+            setLoading(false)
             console.log(err)
             setErrorMsg(err.response.data.msg)
             setErrorModal(true)

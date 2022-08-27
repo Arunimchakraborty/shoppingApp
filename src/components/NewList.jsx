@@ -66,7 +66,7 @@ export default function NewList({list, setList}) {
                 <List type="ordered">
                     {items.map((val, index) => {
                         return(
-                            <Items item={val} /> 
+                            <Items item={val} key={index} onClick={() => setItems(items.splice(index-1, 1)) } /> 
                         )
                     })}
                 </List>
@@ -108,7 +108,7 @@ export default function NewList({list, setList}) {
     )
 }
 
-function Items({item}) {
+function Items({item, onClick}) {
     return(
         <div 
         style={{paddingTop: 20, 
@@ -128,13 +128,13 @@ function Items({item}) {
             <div>
                 <List.Item>{item.name} - {item.value} {item.unit}</List.Item>
             </div>
-            <div style={{position: "absolute", right: 70, top: "30%"}}>
+            {/* <div style={{position: "absolute", right: 70, top: "30%"}}>
                 <ActionIcon variant="filled">
                     <IconEdit size={18} />
                 </ActionIcon>
-            </div>
+            </div> */}
             <div style={{position: "absolute", right: 30, top: "30%"}}>
-                <ActionIcon variant="filled" color={'red'}>
+                <ActionIcon variant="filled" color={'red'} onClick={onClick}>
                     <IconTrash size={18} />
                 </ActionIcon>
             </div>
