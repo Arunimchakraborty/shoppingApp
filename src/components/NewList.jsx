@@ -66,7 +66,7 @@ export default function NewList({list, setList}) {
                 <List type="ordered">
                     {items.map((val, index) => {
                         return(
-                            <Items item={val} key={index} onClick={() => setItems(items.splice(index-1, 1)) } /> 
+                            <Items item={val} key={index} onClick={() => setItems(items.filter(e => e!=val)) } /> 
                         )
                     })}
                 </List>

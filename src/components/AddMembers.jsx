@@ -60,6 +60,7 @@ export default function AddMember(){
       setLoading(false)
     })
     .catch(err => {
+      setLoading(false)
       setErrMsg(err.response.data.msg)
       setErrModal(true)
     })
@@ -68,13 +69,14 @@ export default function AddMember(){
   function addMembers() {
     setLoading(true)
     axios
-    .post(`${config.backendLocation}/family/addmembers/${id}`, {members: familyIDs}, {headers: {token : localStorage.getItem('token')}})
+    .post(`${config.backendLocation}/family/patchfamily/${id}`, {members: familyIDs}, {headers: {token : localStorage.getItem('token')}})
     .then(res => {
       console.log(res)
       setLoading(false)
       navigate('../mainpage')
     })
     .catch(err => {
+      setLoading(false)
       setErrMsg(err.response.data.msg)
       setErrModal(true)
     })
@@ -114,8 +116,8 @@ export default function AddMember(){
           </div> */}
           <div style={{paddingTop: 20}}>
             <List>
-              {family ?family.map(val => {return(
-                <Items email={val.email} />
+              {family ?family.map((val, index) => {return(
+                <Items email={val.email} onClick={() => setFamily(family.filter(e => e!=val))} />
               )}) : null}
             </List>
           </div>
@@ -143,7 +145,7 @@ export default function AddMember(){
   )
 }
 
-function Items({email}) {
+function Items({email, onClick}) {
   return(
       <div style={{paddingTop: 20, 
       paddingBottom: 20, 
@@ -166,7 +168,7 @@ function Items({email}) {
           </ActionIcon>
         </div> */}
         <div style={{position: "absolute", right: 30, top: "30%"}}>
-          <ActionIcon variant="filled" color={'red'}>
+          <ActionIcon variant="filled" color={'red'} onClick={onClick}>
             <IconTrash size={18} />
           </ActionIcon>
         </div>

@@ -72,11 +72,11 @@ export default function ShowList() {
                                     <Text>{val.name}</Text>
                                     <Text>{val.value} {val.unit}</Text>
                                 </div>
-                                <div style={{position: "absolute", right: 30, top: "30%"}}>
+                                {/* <div style={{position: "absolute", right: 30, top: "30%"}}>
                                     <ActionIcon variant="filled">
                                         <IconEdit size={18} />
                                     </ActionIcon>
-                                </div>
+                                </div> */}
                             </div>
                         )
                     })}

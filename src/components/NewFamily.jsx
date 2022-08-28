@@ -46,7 +46,7 @@ export default function NewFamily(){
       navigate('../mainpage')
     })
     .catch(err => {
-      setErrMsg(err.response.data.msg)
+      setErrMsg(err.response.data.msg.message)
       setErrModal(true)
     })
   }

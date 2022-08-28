@@ -1,4 +1,5 @@
-import { Anchor, Button, NativeSelect, Tabs, Text, LoadingOverlay } from "@mantine/core";
+import { Anchor, Button, NativeSelect, Tabs, Text, LoadingOverlay, ActionIcon } from "@mantine/core";
+import { IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -81,6 +82,18 @@ export default function ShoppingLists() {
         : console.log('undefined selectedfamily')
     }, [selectedFamily])
 
+    function deleteList(id) {
+        SetLoading(true)
+        axios
+        .post(`${config.backendLocation}/list/deletelist/${id}`, {}, {headers: {token : localStorage.getItem('token')}})
+        .then(res => {SetLoading(false); 
+            console.log('Deleted ' + id); 
+            console.log(res)
+            window.location.reload()
+        })
+        .catch(err => {SetLoading(false); console.log(err)})
+    }
+
     // useEffect(() => {if(family.length != 0)setSelectedFamily(family[0].name)}, [family])
 
     useEffect(() => {console.log(selectedFamily)}, [selectedFamily])
@@ -96,7 +109,7 @@ export default function ShoppingLists() {
                 </Tabs.List>
 
                 <Tabs.Panel value="self" pt="xs">
-                    <SelfList shoppingLists={shoppingLists} navigate={navigate} SetLoading={SetLoading} /> 
+                    <SelfList shoppingLists={shoppingLists} navigate={navigate} SetLoading={SetLoading} deleteFunc={deleteList} /> 
                 </Tabs.Panel>
 
                 <Tabs.Panel value="family" pt="xs">
@@ -107,6 +120,7 @@ export default function ShoppingLists() {
                     value={selectedFamily} 
                     navigate={navigate} 
                     SetLoading={SetLoading}
+                    deleteFunc={deleteList}
                     />
                 </Tabs.Panel>
             </Tabs>
@@ -116,7 +130,7 @@ export default function ShoppingLists() {
     )
 }
 
-function SelfList({shoppingLists, navigate, SetLoading}){
+function SelfList({shoppingLists, navigate, SetLoading, deleteFunc}){
     // let month = 0
     // let day = 0
     // let year = 0
@@ -135,11 +149,22 @@ function SelfList({shoppingLists, navigate, SetLoading}){
                     <div key={index} 
                     style={{paddingTop: 20, paddingBottom: 20, backgroundColor: "#ECF0F1", 
                         width: "90%", marginBottom: 10, paddingLeft: 20, 
-                        paddingRight: 10, borderRadius: 10}}
-                    onClick={() => {SetLoading(true);navigate(`/showlist/${item._id}`)}}
+                        paddingRight: 10, borderRadius: 10, flexDirection: "row", display: "flex"}}
                     >
-                        <Text size={'md'}>Date - {parsedDate.getDate()} {months[parsedDate.getMonth()]} {parsedDate.getFullYear()}</Text>
-                        <Text size={'sm'}>Time - {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
+                        <div>
+                            <Text size={'md'}>Date - {parsedDate.getDate()} {months[parsedDate.getMonth()]} {parsedDate.getFullYear()}</Text>
+                            <Text size={'sm'}>Time - {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
+                        </div>
+                        <div style={{position: "relative", right: "-30%", top: -10}}>
+                            <ActionIcon variant="filled" color={'red'} onClick={() => deleteFunc(item._id)}>
+                                <IconTrash size={18} />
+                            </ActionIcon>
+                        </div>
+                        <div style={{position: "relative", right: "-20%", top: 30}}>
+                            <ActionIcon variant="filled" color={'gray'} onClick={() => {SetLoading(true);navigate(`/showlist/${item._id}`)}}>
+                                <IconEye size={18} />
+                            </ActionIcon>
+                        </div>
                     </div>
                 )
             })  : 
@@ -156,7 +181,7 @@ function SelfList({shoppingLists, navigate, SetLoading}){
     )
 }
 
-function FamilyList({data, value, setValue, shoppingLists, navigate, SetLoading}) {
+function FamilyList({data, value, setValue, shoppingLists, navigate, SetLoading, deleteFunc}) {
     let parsedDate = 0;
     // var tzoffset = (new Date()).getTimezoneOffset() * 60000; // timezone offset in milliseconds
     return(
@@ -177,11 +202,32 @@ function FamilyList({data, value, setValue, shoppingLists, navigate, SetLoading}
                     shoppingLists ? shoppingLists.slice(0).reverse().map((item, index) => {
                         const parsedDate = new Date(item.createdAt)
                         return(
-                                <div key={index} style={{paddingTop: 20, paddingBottom: 20, backgroundColor: "#ECF0F1", width: "90%", marginBottom: 10, paddingLeft: 20, paddingRight: 10, borderRadius: 10}}
-                                    onClick={() => {SetLoading(true);navigate(`/showlist/${item._id}`)}}
+                                <div key={index} style={{paddingTop: 20, 
+                                    paddingBottom: 20, 
+                                    backgroundColor: "#ECF0F1", 
+                                    width: "90%", 
+                                    marginBottom: 10, 
+                                    paddingLeft: 20, 
+                                    paddingRight: 10, 
+                                    borderRadius: 10,
+                                    display: "flex",
+                                    flexDirection: "row"
+                                }}
                                 >
-                                    <Text size={'md'}>Date - {parsedDate.getDate()} {months[parsedDate.getMonth()]} {parsedDate.getFullYear()}</Text>
-                                    <Text size={'sm'}>Time - {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
+                                    <div>
+                                        <Text size={'md'}>Date - {parsedDate.getDate()} {months[parsedDate.getMonth()]} {parsedDate.getFullYear()}</Text>
+                                        <Text size={'sm'}>Time - {parsedDate.getHours()}:{parsedDate.getMinutes()}</Text>
+                                    </div>
+                                    <div style={{position: "relative", right: "-30%", top: -10}}>
+                                        <ActionIcon variant="filled" color={'red'} onClick={() => deleteFunc(item._id)}>
+                                            <IconTrash size={18} />
+                                        </ActionIcon>
+                                    </div>
+                                    <div style={{position: "relative", right: "-20%", top: 30}}>
+                                        <ActionIcon variant="filled" color={'gray'} onClick={() => {SetLoading(true);navigate(`/showlist/${item._id}`)}}>
+                                            <IconEye size={18} />
+                                        </ActionIcon>
+                                    </div>
                                 </div>
                         )
                     })  : 
