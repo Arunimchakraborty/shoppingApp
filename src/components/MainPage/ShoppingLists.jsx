@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import config from "../../config";
+import ErrorModal from "../Error";
 
 const months = [
     'January', 'February', 'March', 'April',
@@ -22,13 +23,19 @@ export default function ShoppingLists() {
     const [screen, setScreen] = useState(0)
     const [id, setID] = useState(0)
     const [loading, SetLoading] = useState(false)
+    const [errMsg, setErrMsg] = useState('')
+    const [errModal, setErrModal] = useState(false)
     useEffect(() => {
 
         SetLoading(true)
         axios
         .get(`${config.backendLocation}/list/creator`, {headers: {token : localStorage.getItem('token')}})
         .then(res => {setShoppingLists(res.data); SetLoading(false)})
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            setErrMsg(err.response.data.msg)
+            setErrModal(true)
+        })
 
         SetLoading(true)
         axios
@@ -38,6 +45,10 @@ export default function ShoppingLists() {
             setFamily(res.data)
             setSelectedFamily(res.data[0].name)
             SetLoading(false)
+        })
+        .catch(err => {
+            setErrMsg(err.response.data.msg)
+            setErrModal(true)
         })
     }, [])
 
@@ -51,7 +62,12 @@ export default function ShoppingLists() {
                 axios
                 .get(`${config.backendLocation}/list/creator`, {headers: {token : localStorage.getItem('token')}})
                 .then(res => {setShoppingLists(res.data); SetLoading(false)})
-                .catch(err => {console.log(err); SetLoading(false)})
+                .catch(err => {
+                    console.log(err); 
+                    SetLoading(false)
+                    setErrMsg(err.response.data.msg)
+                    setErrModal(true)
+                })
             }
             else {
                 SetLoading(true)
@@ -65,7 +81,12 @@ export default function ShoppingLists() {
                     .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
                         {headers: {token : localStorage.getItem('token')}})
                     .then(res => {setShoppingLists(res.data); SetLoading(false)})
-                    .catch(err => {console.log(err); SetLoading(false)})
+                    .catch(err => {
+                        console.log(err); 
+                        SetLoading(false)
+                        setErrMsg(err.response.data.msg)
+                        setErrModal(true)
+                    })
                 : console.log('Nothing found')
             }
         }
@@ -78,7 +99,12 @@ export default function ShoppingLists() {
         .get(`${config.backendLocation}/list/assigned/${family.filter(e => e.name == selectedFamily)[0]._id}`,
             {headers: {token : localStorage.getItem('token')}})
         .then(res => {setShoppingLists(res.data); SetLoading(false)})
-        .catch(err => {console.log(err); SetLoading(false)}))
+        .catch(err => {
+            console.log(err); 
+            SetLoading(false)
+            setErrMsg(err.response.data.msg)
+            setErrModal(true)
+        }))
         : console.log('undefined selectedfamily')
     }, [selectedFamily])
 
@@ -91,7 +117,12 @@ export default function ShoppingLists() {
             console.log(res)
             window.location.reload()
         })
-        .catch(err => {SetLoading(false); console.log(err)})
+        .catch(err => {
+            SetLoading(false); 
+            console.log(err)
+            setErrMsg(err.response.data.msg)
+            setErrModal(true)
+        })
     }
 
     // useEffect(() => {if(family.length != 0)setSelectedFamily(family[0].name)}, [family])
@@ -126,6 +157,7 @@ export default function ShoppingLists() {
             </Tabs>
             {/* {screen == 0 ? <SelfList shoppingLists={shoppingLists} navigate={navigate} /> 
             : <FamilyList data={family} shoppingLists={shoppingLists} setValue={setSelectedFamily} value={selectedFamily} navigate={navigate} />} */}
+            <ErrorModal msg={errMsg} setVisible={setErrModal} visible={errModal} />
         </div>
     )
 }
