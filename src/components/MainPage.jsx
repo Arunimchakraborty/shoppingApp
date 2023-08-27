@@ -12,7 +12,7 @@ import {
   LoadingOverlay
 } from '@mantine/core';
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MainScreen from './MainScreen';
 import { Preferences } from '@capacitor/preferences';
 import config from '../config';
@@ -59,6 +59,7 @@ export default function MainPage() {
       })
       .catch(err => {
         console.log(err)
+
       })
   }
 

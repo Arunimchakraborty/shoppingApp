@@ -1,6 +1,6 @@
-import { ActionIcon, Button, Input, List, LoadingOverlay, ScrollArea, Text } from "@mantine/core";
+import { ActionIcon, Button, Input, List, LoadingOverlay, ScrollArea } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
-import { IconAt, IconEdit, IconPlus, IconTrash } from "@tabler/icons";
+import { IconAt, IconPlus, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";

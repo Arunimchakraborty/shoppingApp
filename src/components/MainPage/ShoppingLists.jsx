@@ -1,9 +1,8 @@
-import { Anchor, Button, NativeSelect, Tabs, Text, LoadingOverlay, ActionIcon } from "@mantine/core";
+import { Button, NativeSelect, Tabs, Text, LoadingOverlay, ActionIcon } from "@mantine/core";
 import { IconEye, IconTrash } from "@tabler/icons";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useCallback } from "react";
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import config from "../../config";

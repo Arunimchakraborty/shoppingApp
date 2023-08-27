@@ -1,5 +1,5 @@
 import { ActionIcon } from "@mantine/core";
-import { IconArrowBack, IconArrowLeft, IconBackhoe } from "@tabler/icons";
+import { IconArrowLeft } from "@tabler/icons";
 
 export default function BackButton({onClick}) {
   return (

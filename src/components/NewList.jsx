@@ -1,13 +1,13 @@
-import { ActionIcon, Button, Group, Input, NumberInput, Text, NumberInputHandlers, NativeSelect, Modal, Autocomplete, ScrollArea } from "@mantine/core";
+import { ActionIcon, Button, Input, NumberInput, Text, NativeSelect, Modal, ScrollArea } from "@mantine/core";
 import { useEffect } from "react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useInputState } from '@mantine/hooks';
 import { List } from '@mantine/core';
 import axios from "axios";
 import config from "../config";
 import { useNavigate } from "react-router-dom";
 import BackButton from "./BackButton";
-import { IconEdit, IconTrash } from "@tabler/icons";
+import { IconTrash } from "@tabler/icons";
 
 export default function NewList({list, setList}) {
 

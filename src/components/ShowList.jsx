@@ -1,5 +1,4 @@
-import { ActionIcon, List, LoadingOverlay, Text } from "@mantine/core";
-import { IconEdit } from "@tabler/icons";
+import { List, LoadingOverlay, Text } from "@mantine/core";
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
